@@ -16,8 +16,7 @@ if [ ! -d .git ]; then
     fi
 fi
 
-version="$(git describe --tags --dirty=-dirty 2>/dev/null | sed 's/-/+/')"
-version="$(echo "$version" | sed 's/-/_/g')"
+version="$(git describe --tags --dirty=-dirty 2>/dev/null)"
 res="$?"
 if [ "${res}" -ne 0 ]; then
     num_commits="$(git log --oneline | wc -l)"
@@ -30,5 +29,6 @@ if [ "${res}" -ne 0 ]; then
 
     version="(none)-${num_commits}-g${latest_commit}"
 fi
+version="$(echo "$version" | sed -e 's/-/+/' -e 's/-/_/g')"
 
 echo "${version}" | tee "${version_file}"
